@@ -24,8 +24,8 @@ const tituloModal = document.querySelector(".tituloModal");
 const fechaModal = document.querySelector(".fecha");
 const nota = document.getElementById("nota");
 const blog = document.querySelector(".blog");
-const guardando = document.querySelector(".guardando");
 const tituloId = document.getElementById("tituloId");
+const all = document.querySelector(".all");
 
 var visible = false;
 var visibleCheck = false;
@@ -51,18 +51,33 @@ const eventoSelect = () => {
         }
         visible = false;
         eliminar.style.display = "none";
+        all.style.display = "none";
     } else {
         for (let i = 0; i < divCheck.length; i++) {
             divCheck[i].style.display = "flex";
         }
         visible = true;
         eliminar.style.display = "block";
+        all.style.display = "block";
     }
 }
 
+var checksHtml = [];
+
+const eventoAll = () => {
+    console.log(checksHtml);
+    checksHtml.map(ch => {
+        ch.value = "on";
+    });
+}
+
+all.addEventListener("click", () => {
+    eventoAll();
+});
+
 añadir.addEventListener("click", () => {
-    guardando.textContent = "";
     save.className = "save";
+    descartar.innerHTML = `Descartar <i class="fas fa-times"></i>`;
     eventoAbrir();
     nota.value = "";
     tituloModal.textContent = "Titulo";
@@ -70,7 +85,6 @@ añadir.addEventListener("click", () => {
 });
 
 cerrarModal.addEventListener("click", () => eventoCerrar());
-descartar.addEventListener("click", () => eventoCerrar());
 seleccionar.addEventListener("click", () => {
     eventoSelect();
 });
@@ -130,10 +144,10 @@ const leerObjetos = () => {
     })
 }
 
-
 const leerNota = id => {
     tituloId.className = `b${id}`;
     save.className = "modify";
+    descartar.innerHTML = `Eliminar <i class="fas fa-times"></i>`;
 
     let db = getObjeto("readonly");
     let cursor = db[0].openCursor();
@@ -159,23 +173,31 @@ const eventoGuardar = (clase) => {
             texto: `${nota.value}`
         }
 
-        guardando.style.color = "red";
-        guardando.textContent = "Guardando...";
-
         let id = parseInt((tituloId.className).replace("b", ""));
 
         modificarObjeto(object, id);
-
-        guardando.style.color = "green";
-        guardando.textContent = "Guardado automaticamente";
-
         eventoCerrar();
     }
 }
 
 save.addEventListener("click", () => {
     eventoGuardar(save.className);
-    console.log(save.className);
+});
+
+descartar.addEventListener("click", () => {
+    if (save.className == "save") {
+        eventoCerrar();
+    } else if (save.className == "modify") {
+
+        let id = parseInt((tituloId.className).replace("b", ""));
+
+        let confirmar = confirm("¿Deseas eliminar esta nota?");
+
+        if (confirmar) {
+            eliminarObjeto(id);
+            eventoCerrar();
+        }
+    }
 });
 
 const eliminarObjeto = key => {
@@ -204,14 +226,13 @@ const definirFecha = () => {
     let hora = date.getHours();
     let min = date.getMinutes();
 
-    (dia < 10) ? dia = `0${dia}`
-        : dia;
-    (mes < 10) ? mes = `0${(mes + 1)}`
-        : mes;
-    (min < 10) ? min = `0${min}`
-        : min;
+    return `${ponerCeros(dia)}/${ponerCeros(mes + 1)}/${año} - ${hora}:${ponerCeros(min)}`;
+}
 
-    return `${dia}/${mes}/${año} - ${hora}:${min}`;
+const ponerCeros = n => {
+    (n < 10) ? n = `0${n}`
+        : n;
+    return n;
 }
 
 const crearElementos = (id, titulo) => {
@@ -240,17 +261,21 @@ const crearElementos = (id, titulo) => {
         abrirModal(id, titulo);
     });
 
+    var checked = false;
     check.addEventListener("change", () => {
-        console.log(check.value);
-        if (check.value) {
+        if (checked === false) {
             checkDelete.push(id);
+            checked = true;
         } else {
             let i = checkDelete.indexOf(id);
             if (i !== -1) {
                 checkDelete.splice(i, 1);
             }
+            checked = false;
         }
     });
+
+    checksHtml.push(check);
 }
 
 var checkDelete = [];
@@ -265,9 +290,15 @@ eliminar.addEventListener("click", () => {
     if (checkDelete.length > 0) {
         checkDelete.map(d => {
             eliminarObjeto(d);
+            let i = checkDelete.indexOf(d);
+            if (i !== -1) {
+                checkDelete.splice(i, 1);
+            }
         });
     }
+    
     blog.innerHTML = "";
     leerObjetos();
     eliminar.style.display = "none";
+    all.style.display = "none";
 });

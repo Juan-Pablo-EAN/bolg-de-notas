@@ -59,8 +59,8 @@ section {
 .divBoton {
     width: 100%;
     margin-bottom: 50px;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .divBoton button {
@@ -73,6 +73,11 @@ section {
     padding: 10px;
     margin-left: 10px;
     outline: none;
+}
+
+.all {
+    background-color: gray;
+    display: none;
 }
 
 .select {
@@ -88,8 +93,21 @@ section {
     background-color: rgb(84, 175, 175);
 }
 
-.divBoton button:hover {
-    background-color: gray;
+.all:hover {
+    background-color: rgb(99, 99, 99);
+}
+
+.select:hover {
+    background-color: rgb(34, 115, 88);
+}
+
+.delete:hover {
+    background-color: rgb(122, 68, 68);
+    display: none;
+}
+
+.add1:hover {
+    background-color: rgb(74, 137, 137);
 }
 
 .fondoModal {
@@ -140,7 +158,7 @@ section {
 .divSave {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
     margin-top: 50px;
 }
@@ -169,7 +187,7 @@ section {
 }
 
 .divSave .modify {
-    background-color: green;
+    background-color: rgb(84, 175, 175);;
 }
 
 .divSave .save:hover {
@@ -177,7 +195,7 @@ section {
 }
 
 .divSave .modify:hover {
-    background-color: rgb(70, 116, 70);;
+    background-color: rgb(44, 135, 135);
 }
 
 .divSave .descart:hover {
