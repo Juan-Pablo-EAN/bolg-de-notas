@@ -107,7 +107,9 @@ section {
 .ventanaModal {
     margin: auto;
     width: 100%;
-    height: 90%;
+    height: auto;
+    min-height: 90%;
+    padding-top: 30px;
     max-width: 800px;
     background-color: rgb(255, 255, 255);
     z-index: 110;
@@ -137,7 +139,10 @@ section {
 
 .divSave {
     width: 100%;
-    text-align: right;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 50px;
 }
 
 .divSave button {
@@ -150,6 +155,11 @@ section {
     padding: 10px;
 }
 
+.divSave span {
+    display: flex;
+    align-items: center;
+}
+
 .divSave .descart {
     background-color: rgb(223, 98, 98);
 }
@@ -158,7 +168,15 @@ section {
     color: white;
 }
 
+.divSave .modify {
+    background-color: green;
+}
+
 .divSave .save:hover {
+    background-color: rgb(70, 116, 70);;
+}
+
+.divSave .modify:hover {
     background-color: rgb(70, 116, 70);;
 }
 

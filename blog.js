@@ -24,6 +24,8 @@ const tituloModal = document.querySelector(".tituloModal");
 const fechaModal = document.querySelector(".fecha");
 const nota = document.getElementById("nota");
 const blog = document.querySelector(".blog");
+const guardando = document.querySelector(".guardando");
+const tituloId = document.getElementById("tituloId");
 
 var visible = false;
 var visibleCheck = false;
@@ -35,6 +37,8 @@ const eventoAbrir = () => {
 
 const eventoCerrar = () => {
     fondoModal.style.display = "none";
+    save.style.display = "block";
+    save.className = "save";
     visible = false;
     blog.innerHTML = "";
     leerObjetos();
@@ -57,6 +61,8 @@ const eventoSelect = () => {
 }
 
 añadir.addEventListener("click", () => {
+    guardando.textContent = "";
+    save.className = "save";
     eventoAbrir();
     nota.value = "";
     tituloModal.textContent = "Titulo";
@@ -124,7 +130,11 @@ const leerObjetos = () => {
     })
 }
 
-const leerNota = async id => {
+
+const leerNota = id => {
+    tituloId.className = `b${id}`;
+    save.className = "modify";
+
     let db = getObjeto("readonly");
     let cursor = db[0].openCursor();
     cursor.addEventListener("success", () => {
@@ -134,11 +144,39 @@ const leerNota = async id => {
                 nota.value = cursor.result.value.texto;
             }
             cursor.result.continue();
-        } else {
-            console.log("Nota leída");
         }
     });
 }
+
+const eventoGuardar = (clase) => {
+    if (clase == "save") {
+        nuevaNota();
+    } else if (clase == "modify") {
+
+        let object = {
+            titulo: `${tituloModal.textContent}`,
+            fecha: `${fechaModal.textContent}`,
+            texto: `${nota.value}`
+        }
+
+        guardando.style.color = "red";
+        guardando.textContent = "Guardando...";
+
+        let id = parseInt((tituloId.className).replace("b", ""));
+
+        modificarObjeto(object, id);
+
+        guardando.style.color = "green";
+        guardando.textContent = "Guardado automaticamente";
+
+        eventoCerrar();
+    }
+}
+
+save.addEventListener("click", () => {
+    eventoGuardar(save.className);
+    console.log(save.className);
+});
 
 const eliminarObjeto = key => {
     let db = getObjeto("readwrite");
@@ -147,8 +185,6 @@ const eliminarObjeto = key => {
         console.log("Nota eliminada exitosamente");
     });
 }
-
-save.addEventListener("click", () => nuevaNota());
 
 const nuevaNota = () => {
     let objeto = {
@@ -172,11 +208,11 @@ const definirFecha = () => {
         : dia;
     (mes < 10) ? mes = `0${(mes + 1)}`
         : mes;
+    (min < 10) ? min = `0${min}`
+        : min;
 
     return `${dia}/${mes}/${año} - ${hora}:${min}`;
 }
-
-console.log(definirFecha());
 
 const crearElementos = (id, titulo) => {
     const note = document.createElement("DIV");
@@ -226,7 +262,7 @@ const abrirModal = async (id, title) => {
 }
 
 eliminar.addEventListener("click", () => {
-    if(checkDelete.length > 0){
+    if (checkDelete.length > 0) {
         checkDelete.map(d => {
             eliminarObjeto(d);
         });
