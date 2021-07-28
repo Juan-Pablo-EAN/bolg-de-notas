@@ -159,7 +159,6 @@ section {
 .ventanaModal textarea {
     width: 100%;
     height: auto;
-    min-height: 200px;
     outline: none;
     border: none;
     border-radius: 5px;
