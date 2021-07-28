@@ -39,6 +39,11 @@ section {
 .divTitulo {
     display: flex;
     align-items: center;
+    height: auto;
+}
+
+.divTitulo, .divTitulo h2 {
+    word-wrap: break-word;
 }
 
 .divCheck {
