@@ -44,6 +44,7 @@ section {
 
 .divTitulo, .divTitulo h2 {
     word-wrap: break-word;
+    word-break: break-all;
 }
 
 .divCheck {
