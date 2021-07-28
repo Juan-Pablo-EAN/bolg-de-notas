@@ -136,6 +136,12 @@ section {
 
 .ventanaModal .modalContenido {
     margin: 3%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modalContenido div {
+    width: 100%;
 }
 
 .ventanaModal .close i {
@@ -152,6 +158,8 @@ section {
 
 .ventanaModal textarea {
     width: 100%;
+    height: auto;
+    min-height: 200px;
     outline: none;
     border: none;
     border-radius: 5px;
