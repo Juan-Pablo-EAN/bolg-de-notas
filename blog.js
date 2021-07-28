@@ -102,9 +102,11 @@ const leerNota = id => {
 const eventoAbrir = () => {
     fondoModal.style.display = "flex";
     visible = true;
+    document.body.style.overflow = "hidden";
 }
 
 const eventoCerrar = () => {
+    document.body.style.overflow = "scroll";
     fondoModal.style.display = "none";
     save.style.display = "block";
     save.className = "save";

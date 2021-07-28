@@ -125,20 +125,19 @@ section {
     margin: auto;
     width: 100%;
     max-width: 800px;
-    height: auto;
+    height: auto;                                       
     max-height: 100%;
     padding-top: 30px;
     background-color: rgb(255, 255, 255);
     z-index: 110;
     border-radius: 7px;
     padding: 0;
-    overflow-y: scroll;
 }
 
-.ventanaModal .modalContenido {
-    margin: 3%;
-    display: flex;
-    flex-wrap: wrap;
+@media screen and (max-width: 700px) {
+    .ventanaModal {
+        overflow-y: scroll;
+    }
 }
 
 .modalContenido div {
@@ -158,9 +157,9 @@ section {
 }
 
 .ventanaModal textarea {
-    width: 100%;
+    width: 99%;
     height: auto;
-    min-height: 200px;
+    min-height: 100%;
     outline: none;
     border: none;
     border-radius: 5px;
@@ -171,16 +170,9 @@ section {
 .modalContenido {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 80px 80px 1fr 80px;
-}
-
-@media screen and (max-width:500px){
-    .ventanaModal {
-        height: 100%;
-    }
-    .modalContenido {
-        height: 90%;
-    }
+    grid-template-rows: auto 50px 30px 1fr auto;
+    margin: 3%;
+    height: 500px;
 }
 
 .divSave {
@@ -228,4 +220,13 @@ section {
 
 .divSave .descart:hover {
     background-color: rgb(112, 53, 53);
+}
+
+@media screen and (max-width:400px){
+    .ventanaModal {
+        height: 100%;
+    }
+    .modalContenido {
+        height: 90%;
+    }
 }
