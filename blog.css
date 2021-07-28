@@ -170,7 +170,7 @@ section {
 .modalContenido {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 50px 30px 1fr auto;
+    grid-template-rows: auto auto auto 1fr auto;
     margin: 3%;
     height: 500px;
 }
@@ -191,6 +191,11 @@ section {
     font-size: large;
     cursor: pointer;
     padding: 10px;
+}
+
+.tituloModal {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .fechaDiv {
