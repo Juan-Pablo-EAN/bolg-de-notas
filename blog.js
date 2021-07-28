@@ -1,16 +1,10 @@
 "strict mode";
 
 window.addEventListener("load", () => {
-    if (location.href.includes("access")) {
-        iniciarBlog();
-    } else {
+    if (location.href.includes("access") == false) {
         document.querySelector(".contenedor").innerHTML = `<h2>No tienes permiso para visualizar este blog de notas</h2>`;
     }
 });
-
-const iniciarBlog = () => {
-
-}
 
 const añadir = document.querySelector(".add1");
 const seleccionar = document.querySelector(".select");
@@ -29,65 +23,8 @@ const all = document.querySelector(".all");
 
 var visible = false;
 var visibleCheck = false;
-
-const eventoAbrir = () => {
-    fondoModal.style.display = "flex";
-    visible = true;
-}
-
-const eventoCerrar = () => {
-    fondoModal.style.display = "none";
-    save.style.display = "block";
-    save.className = "save";
-    visible = false;
-    blog.innerHTML = "";
-    leerObjetos();
-}
-
-const eventoSelect = () => {
-    if (visible) {
-        for (let i = 0; i < divCheck.length; i++) {
-            divCheck[i].style.display = "none";
-        }
-        visible = false;
-        eliminar.style.display = "none";
-        all.style.display = "none";
-    } else {
-        for (let i = 0; i < divCheck.length; i++) {
-            divCheck[i].style.display = "flex";
-        }
-        visible = true;
-        eliminar.style.display = "block";
-        all.style.display = "block";
-    }
-}
-
 var checksHtml = [];
-
-const eventoAll = () => {
-    console.log(checksHtml);
-    checksHtml.map(ch => {
-        ch.value = "on";
-    });
-}
-
-all.addEventListener("click", () => {
-    eventoAll();
-});
-
-añadir.addEventListener("click", () => {
-    save.className = "save";
-    descartar.innerHTML = `Descartar <i class="fas fa-times"></i>`;
-    eventoAbrir();
-    nota.value = "";
-    tituloModal.textContent = "Titulo";
-    fechaModal.textContent = "";
-});
-
-cerrarModal.addEventListener("click", () => eventoCerrar());
-seleccionar.addEventListener("click", () => {
-    eventoSelect();
-});
+var checkDelete = [];
 
 let IDBRequest = indexedDB.open("notesDB", 1);
 
@@ -161,6 +98,64 @@ const leerNota = id => {
         }
     });
 }
+
+const eventoAbrir = () => {
+    fondoModal.style.display = "flex";
+    visible = true;
+}
+
+const eventoCerrar = () => {
+    fondoModal.style.display = "none";
+    save.style.display = "block";
+    save.className = "save";
+    visible = false;
+    blog.innerHTML = "";
+    checksHtml = [];
+    leerObjetos();
+}
+
+const eventoSelect = () => {
+    if (visible) {
+        for (let i = 0; i < divCheck.length; i++) {
+            divCheck[i].style.display = "none";
+        }
+        visible = false;
+        eliminar.style.display = "none";
+        all.style.display = "none";
+    } else {
+        for (let i = 0; i < divCheck.length; i++) {
+            divCheck[i].style.display = "flex";
+        }
+        visible = true;
+        eliminar.style.display = "block";
+        all.style.display = "block";
+    }
+}
+
+const eventoAll = () => {
+    console.log(checksHtml);
+    checksHtml.map(ch => {
+        ch.click();
+    });
+}
+
+all.addEventListener("click", () => {
+    eventoAll();
+});
+
+añadir.addEventListener("click", () => {
+    save.className = "save";
+    descartar.innerHTML = `Descartar <i class="fas fa-times"></i>`;
+    eventoAbrir();
+    nota.value = "";
+    tituloModal.textContent = "Titulo";
+    fechaModal.textContent = "";
+});
+
+cerrarModal.addEventListener("click", () => eventoCerrar());
+seleccionar.addEventListener("click", () => {
+    eventoSelect();
+});
 
 const eventoGuardar = (clase) => {
     if (clase == "save") {
@@ -278,8 +273,6 @@ const crearElementos = (id, titulo) => {
     checksHtml.push(check);
 }
 
-var checkDelete = [];
-
 const abrirModal = async (id, title) => {
     eventoAbrir();
     leerNota(id);
@@ -287,16 +280,16 @@ const abrirModal = async (id, title) => {
 }
 
 eliminar.addEventListener("click", () => {
-    if (checkDelete.length > 0) {
+    if (checkDelete.length >= 0) {
         checkDelete.map(d => {
             eliminarObjeto(d);
-            let i = checkDelete.indexOf(d);
-            if (i !== -1) {
-                checkDelete.splice(i, 1);
-            }
         });
+        checkDelete = [];
+        checksHtml = [];
+        console.log(checkDelete);
+        console.log(checksHtml);
     }
-    
+
     blog.innerHTML = "";
     leerObjetos();
     eliminar.style.display = "none";
