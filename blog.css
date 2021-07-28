@@ -151,9 +151,9 @@ section {
     font-size: large;
 }
 
-.ventanaModal div .tituloModal {
+.ventanaModal div .tituloModal, .fechaDiv {
     outline: none;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 10px 0px;
 }
 
 .ventanaModal textarea {
@@ -191,6 +191,11 @@ section {
     font-size: large;
     cursor: pointer;
     padding: 10px;
+}
+
+.fechaDiv {
+    display: flex;
+    align-items: center;
 }
 
 .divSave span {
