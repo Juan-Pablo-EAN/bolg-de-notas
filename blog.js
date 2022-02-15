@@ -159,6 +159,7 @@ seleccionar.addEventListener("click", () => {
 
 const eventoGuardar = (clase) => {
     if (clase == "save") {
+        console.log("lo lee")
         nuevaNota();
     } else if (clase == "modify") {
 
@@ -176,7 +177,7 @@ const eventoGuardar = (clase) => {
 }
 
 save.addEventListener("click", () => {
-    eventoGuardar(save.className);
+    eventoGuardar(save.classList[0]);
 });
 
 descartar.addEventListener("click", () => {
