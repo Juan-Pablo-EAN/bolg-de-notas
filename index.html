@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="bootstrap.css">
     <link rel="stylesheet" href="blog.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -14,43 +15,59 @@
 </head>
 
 <body>
-    <header>
-        <h1>¡Bienvenido a tu blog de notas!</h1>
-    </header>
-    <section>
-        <div class="contenedor">
-            <div class="divBoton">
-                <button class="select btn btn-success">Seleccionar <i class="fas fa-check"></i></button>
-                <button class="delete btn btn-danger">Eliminar <i class="fas fa-trash-alt"></i></button>
-                <button class="all btn btn-primary">Seleccionar Todo <i class="fas fa-check-circle"></i></button>
-                <button class="add1 btn btn-info">Añadir <i class="fas fa-plus"></i></button>
-            </div>
-            <div class="blog"></div>
-        </div>
-        <div class="fondoModal">
-            <div class="ventanaModal">
-                <div class="modalContenido">
-                    <div class="close">
-                        <i class="fas fa-times cerrarModal"></i>
-                    </div>
-                    <div id="tituloId">
-                        <h2 class="tituloModal" contenteditable="true">Título</h2>
-                    </div>
-                    <div class="fechaDiv">
-                        <h5 class="fecha"></h5>
-                    </div>
-                    <div class="divTexto">
-                        <textarea spellcheck="false" lang="es" name="note" id="nota"
-                            placeholder="Escribe tu nota aquí"></textarea>
-                    </div>
-                    <div class="divSave">
-                        <button class="descart btn btn-danger">Descartar <i class="fas fa-times"></i></button>
-                        <button class="save btn btn-success">Guardar <i class="fas fa-save"></i></button>
+    <div class="container">
+        <header>
+            <h1 class="text-center">¡Bienvenido a tu blog de notas!</h1>
+        </header>
+        <br>
+        <section>
+            <div class="contenedor">
+                <div class="divBoton text-center">
+                    <button style="width: 80%;" type="button" class="add1 btn btn-info" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Añadir
+                        <i class="fas fa-plus"></i></button>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Blog de notas</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="tituloId">
+                                    <h2 class="tituloModal" contenteditable="true" style="outline: none;">Escribe un título</h2>
+                                </div>
+                                <div class="fechaDiv">
+                                    <h5 class="fecha"></h5>
+                                </div>
+                                <div class="form-group">
+                                    <textarea placeholder="Escribe tu nota aquí" class="form-control"
+                                        id="exampleTextarea" rows="12"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer divSave">
+                                <button class="descart btn btn-danger" data-bs-dismiss="modal">Descartar <i
+                                        class="fas fa-times"></i></button>
+                                <button class="save btn btn-success" data-bs-dismiss="modal">Guardar <i class="fas fa-save"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <br>
+                <div class="blog">
+                    <div class="accordion" id="accordionExample"></div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
     <script src="blog.js"></script>
 </body>
+
 </html>

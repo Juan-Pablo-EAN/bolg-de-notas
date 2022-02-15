@@ -1,24 +1,13 @@
 "strict mode";
 
 const añadir = document.querySelector(".add1");
-const seleccionar = document.querySelector(".select");
-const eliminar = document.querySelector(".delete");
-const fondoModal = document.querySelector(".fondoModal");
 const save = document.querySelector(".save");
-const descartar = document.querySelector(".descart");
-const cerrarModal = document.querySelector(".cerrarModal");
-const divCheck = document.getElementsByClassName("divCheck");
 const tituloModal = document.querySelector(".tituloModal");
 const fechaModal = document.querySelector(".fecha");
-const nota = document.getElementById("nota");
-const blog = document.querySelector(".blog");
-const tituloId = document.getElementById("tituloId");
-const all = document.querySelector(".all");
+const nota = document.getElementById("exampleTextarea");
+const blog = document.querySelector(".accordion");
 
-var visible = false;
-var visibleCheck = false;
-var checksHtml = [];
-var checkDelete = [];
+var idModify;
 
 let IDBRequest = indexedDB.open("notesDB", 1);
 
@@ -59,162 +48,68 @@ const modificarObjeto = (objeto, key) => {
     db[0].put(objeto, key);
     db[1].addEventListener("complete", () => {
         console.log("Elemento modificado exitosamente");
+        save.classList.remove("modificar");
+        // location.reload();
+        leerObjetos();
+    });
+}
+
+const obtenerObjeto = id => {
+    let db = getObjeto("readonly");
+    let objeto = db[0].get(id);
+    objeto.addEventListener("success", () => {
+        tituloModal.textContent = objeto.result.titulo;
+        fechaModal.textContent = objeto.result.fecha;
+        nota.textContent = objeto.result.texto;
     });
 }
 
 const leerObjetos = () => {
+    blog.innerHTML = "";
     let db = getObjeto("readonly");
     let cursor = db[0].openCursor();
     cursor.addEventListener("success", () => {
         if (cursor.result) {
-            crearElementos(cursor.result.key, cursor.result.value.titulo);
+            crearElementos(cursor.result.key, cursor.result.value.titulo, cursor.result.value.texto);
             cursor.result.continue();
         } else {
             console.log("Datos leídos");
         }
-    })
-}
-
-const leerNota = id => {
-    tituloId.className = `b${id}`;
-    save.className = "modify";
-    save.classList.add("btn");
-    save.classList.add("btn-success");
-    descartar.innerHTML = `Eliminar <i class="fas fa-times"></i>`;
-
-    let db = getObjeto("readonly");
-    let cursor = db[0].openCursor();
-    cursor.addEventListener("success", () => {
-        if (cursor.result) {
-            if (cursor.result.key == id) {
-                fechaModal.textContent = cursor.result.value.fecha;
-                nota.value = cursor.result.value.texto;
-            }
-            cursor.result.continue();
-        }
     });
 }
-
-const eventoAbrir = () => {
-    fondoModal.style.display = "flex";
-    visible = true;
-    document.body.style.overflow = "hidden";
-}
-
-const eventoCerrar = () => {
-    document.body.style.overflow = "scroll-y";
-    fondoModal.style.display = "none";
-    save.style.display = "block";
-    save.className = "save";
-    visible = false;
-    blog.innerHTML = "";
-    checksHtml = [];
-    leerObjetos();
-}
-
-const eventoSelect = () => {
-    if (visible) {
-        for (let i = 0; i < divCheck.length; i++) {
-            divCheck[i].style.display = "none";
-        }
-        visible = false;
-        eliminar.style.display = "none";
-        all.style.display = "none";
-    } else {
-        for (let i = 0; i < divCheck.length; i++) {
-            divCheck[i].style.display = "flex";
-        }
-        visible = true;
-        eliminar.style.display = "block";
-        all.style.display = "block";
-    }
-}
-
-const eventoAll = () => {
-    console.log(checksHtml);
-    checksHtml.map(ch => {
-        ch.click();
-    });
-}
-
-all.addEventListener("click", () => {
-    eventoAll();
-});
-
-añadir.addEventListener("click", () => {
-    save.className = "save";
-    save.classList.add("btn");
-    save.classList.add("btn-success");
-    descartar.innerHTML = `Descartar <i class="fas fa-times"></i>`;
-    eventoAbrir();
-    nota.value = "";
-    tituloModal.textContent = "Titulo";
-    fechaModal.textContent = "";
-});
-
-cerrarModal.addEventListener("click", () => eventoCerrar());
-seleccionar.addEventListener("click", () => {
-    eventoSelect();
-});
-
-const eventoGuardar = (clase) => {
-    if (clase == "save") {
-        console.log("lo lee")
-        nuevaNota();
-    } else if (clase == "modify") {
-
-        let object = {
-            titulo: `${tituloModal.textContent}`,
-            fecha: `${fechaModal.textContent}`,
-            texto: `${nota.value}`
-        }
-
-        let id = parseInt((tituloId.className).replace("b", ""));
-
-        modificarObjeto(object, id);
-        eventoCerrar();
-    }
-}
-
-save.addEventListener("click", () => {
-    eventoGuardar(save.classList[0]);
-});
-
-descartar.addEventListener("click", () => {
-    if (save.className == "save") {
-        save.classList.add("btn");
-        save.classList.add("btn-success");
-        eventoCerrar();
-    } else if (save.className == "modify") {
-
-        let id = parseInt((tituloId.className).replace("b", ""));
-
-        let confirmar = confirm("¿Deseas eliminar esta nota?");
-
-        if (confirmar) {
-            eliminarObjeto(id);
-            eventoCerrar();
-        }
-    }
-});
 
 const eliminarObjeto = key => {
     let db = getObjeto("readwrite");
     db[0].delete(key);
     db[1].addEventListener("complete", () => {
         console.log("Nota eliminada exitosamente");
+        // location.reload();
+        leerObjetos();
     });
 }
 
-const nuevaNota = () => {
-    let objeto = {
-        titulo: `${tituloModal.textContent}`,
-        fecha: `${definirFecha()}`,
-        texto: `${nota.value}`
+save.addEventListener("click", () => {
+    console.log(save.classList[save.classList.length - 1]);
+    if (save.classList[save.classList.length - 1] == "modificar") {
+        let objeto = {
+            id: `${fechaModal.textContent}`,
+            titulo: `${tituloModal.textContent}`,
+            fecha: `${fechaModal.textContent}`,
+            texto: `${nota.value}`
+        }
+        modificarObjeto(objeto, idModify);
+    } else {
+        let fecha = new Date;
+        let objeto = {
+            id: `${fecha.getMilliseconds() + 77}`,
+            titulo: `${tituloModal.textContent}`,
+            fecha: `${definirFecha()}`,
+            texto: `${nota.value}`
+        }
+        addObjeto(objeto);
+        crearElementos(objeto.id, objeto.titulo, objeto.texto);
     }
-    addObjeto(objeto);
-    eventoCerrar();
-}
+});
 
 const definirFecha = () => {
     let date = new Date;
@@ -227,74 +122,39 @@ const definirFecha = () => {
     return `${ponerCeros(dia)}/${ponerCeros(mes + 1)}/${año} - ${hora}:${ponerCeros(min)}`;
 }
 
+const crearElementos = (id, titulo, texto) => {
+    let item = `
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading${id}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapse${id}" aria-expanded="false" aria-controls="collapse${id}">
+                ${titulo}
+            </button>
+        </h2>
+    <div id="collapse${id}" class="accordion-collapse collapse" aria-labelledby="heading${id}"
+    data-bs-parent="#accordionExample" style="">
+        <div class="accordion-body">
+        ${texto}
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <button onclick="eliminarObjeto(${id})" type="button" class="btn btn-warning">Eliminar</button>
+        <button onclick="editarOb(${id})" type="button" class="btn btn-success">Editar</button>
+        </div>
+    </div>  
+    </div>
+    `;
+    blog.innerHTML += item;
+}
+
 const ponerCeros = n => {
     (n < 10) ? n = `0${n}`
         : n;
     return n;
 }
 
-const crearElementos = (id, titulo) => {
-    const note = document.createElement("DIV");
-    const divTitulo = document.createElement("DIV");
-    const divCheck = document.createElement("DIV");
-    const h2 = document.createElement("H2");
-    const check = document.createElement("INPUT");
-
-    note.classList.add("note");
-    divTitulo.classList.add("divTitulo");
-    divCheck.classList.add("divCheck");
-    check.setAttribute("type", "checkbox");
-    check.classList.add("check");
-
-    divCheck.appendChild(check);
-    divTitulo.appendChild(h2);
-    note.appendChild(divTitulo);
-    note.appendChild(divCheck);
-
-    blog.appendChild(note);
-
-    h2.textContent = titulo;
-
-    divTitulo.addEventListener("click", () => {
-        abrirModal(id, titulo);
-    });
-
-    var checked = false;
-    check.addEventListener("change", () => {
-        if (checked === false) {
-            checkDelete.push(id);
-            checked = true;
-        } else {
-            let i = checkDelete.indexOf(id);
-            if (i !== -1) {
-                checkDelete.splice(i, 1);
-            }
-            checked = false;
-        }
-    });
-
-    checksHtml.push(check);
+const editarOb = (id) => {
+    save.classList.add("modificar");
+    idModify = id;
+    añadir.click();
+    obtenerObjeto(id);
 }
-
-const abrirModal = async (id, title) => {
-    eventoAbrir();
-    leerNota(id);
-    tituloModal.textContent = title;
-}
-
-eliminar.addEventListener("click", () => {
-    if (checkDelete.length >= 0) {
-        checkDelete.map(d => {
-            eliminarObjeto(d);
-        });
-        checkDelete = [];
-        checksHtml = [];
-        console.log(checkDelete);
-        console.log(checksHtml);
-    }
-
-    blog.innerHTML = "";
-    leerObjetos();
-    eliminar.style.display = "none";
-    all.style.display = "none";
-});
