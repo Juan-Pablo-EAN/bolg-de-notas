@@ -1,11 +1,5 @@
 "strict mode";
 
-window.addEventListener("load", () => {
-    if (location.href.includes("access") == false) {
-        document.querySelector(".contenedor").innerHTML = `<h2>No tienes permiso para visualizar este blog de notas</h2>`;
-    }
-});
-
 const añadir = document.querySelector(".add1");
 const seleccionar = document.querySelector(".select");
 const eliminar = document.querySelector(".delete");
@@ -84,6 +78,8 @@ const leerObjetos = () => {
 const leerNota = id => {
     tituloId.className = `b${id}`;
     save.className = "modify";
+    save.classList.add("btn");
+    save.classList.add("btn-success");
     descartar.innerHTML = `Eliminar <i class="fas fa-times"></i>`;
 
     let db = getObjeto("readonly");
@@ -106,7 +102,7 @@ const eventoAbrir = () => {
 }
 
 const eventoCerrar = () => {
-    document.body.style.overflow = "scroll";
+    document.body.style.overflow = "scroll-y";
     fondoModal.style.display = "none";
     save.style.display = "block";
     save.className = "save";
@@ -147,6 +143,8 @@ all.addEventListener("click", () => {
 
 añadir.addEventListener("click", () => {
     save.className = "save";
+    save.classList.add("btn");
+    save.classList.add("btn-success");
     descartar.innerHTML = `Descartar <i class="fas fa-times"></i>`;
     eventoAbrir();
     nota.value = "";
@@ -183,6 +181,8 @@ save.addEventListener("click", () => {
 
 descartar.addEventListener("click", () => {
     if (save.className == "save") {
+        save.classList.add("btn");
+        save.classList.add("btn-success");
         eventoCerrar();
     } else if (save.className == "modify") {
 
